@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-block {
+    width: 90%;
+    margin: 0 auto;
+    background-color: silver;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+button {
+    width: 150px;
+    height: 60px;
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.red {
+    background-color: red;
+}
+.blue {
+    background-color: blue;
+}
