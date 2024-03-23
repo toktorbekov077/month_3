@@ -88,7 +88,7 @@ const converter = (element, targetElement, anotherElement, current) => {
                     break
             }
 
-            element.value === '' && (targetElement.value = '') && element.value === '' && (anotherElement.value = '')
+            element.value === '' && (targetElement.value =  anotherElement.value = '')
 
         }
     }
