@@ -18,6 +18,7 @@ phoneButton.addEventListener('click', () =>{
 const tabContents = document.querySelectorAll('.tab_content_block')
 const tabs = document.querySelectorAll('.tab_content_item')
 const tabsParent =document.querySelector('.tab_content_items')
+let currentTab = 0
 
 
 const hideContent = () => {
@@ -35,8 +36,15 @@ const showTabContent=(index=0)=>{
     tabs[index].classList.add('tab_content_item_active')
 }
 
+const switchTab = () => {
+    hideContent()
+    currentTab = (currentTab +1) % tabs.length
+    showTabContent(currentTab)
+}
+
 hideContent()
 showTabContent()
+setInterval(switchTab,3000)
 
 tabsParent.onclick=(event)=>{
     if(event.target.classList.contains('tab_content_item')){
@@ -49,24 +57,43 @@ tabsParent.onclick=(event)=>{
     }
 }
 
-let currentIndex = 0;
-const intervalTime = 3000; // 3 секунды
+const somInput = document.querySelector("#som")
+const usdInput = document.querySelector("#usd")
+const eurInput = document.querySelector("#eur")
 
-const autoSlide = () => {
-    currentIndex++;
-    if (currentIndex === tabs.length) {
-        currentIndex = 0;
+const converter = (element, targetElement, anotherElement, current) => {
+    element.oninput = () => {
+        const request = new XMLHttpRequest()
+        request.open('GET', '../data/converter.json')
+        request.setRequestHeader('Content-type', 'application/json')
+        request.send()
+
+        request.onload = () => {
+            const data = JSON.parse(request.response)
+
+            switch (current) {
+                case 'som':
+                    targetElement.value = (element.value / data.usd).toFixed(2)
+                    anotherElement.value = (element.value / data.eur).toFixed(2)
+                    break
+                case 'usd':
+                    targetElement.value = (element.value * data.usd).toFixed(2)
+                    anotherElement.value = (element.value * data.usd / data.eur).toFixed(2)
+                    break
+                case 'eur':
+                    targetElement.value = (element.value * data.eur).toFixed(2)
+                    anotherElement.value = (element.value * data.eur / data.usd).toFixed(2)
+                    break
+                default:
+                    break
+            }
+
+            element.value === '' && (targetElement.value = '') && element.value === '' && (anotherElement.value = '')
+
+        }
     }
-    hideContent();
-    showTabContent(currentIndex);
-};
+}
 
-let sliderInterval = setInterval(autoSlide, intervalTime);
-
-tabsParent.onmouseenter = () => {
-    clearInterval(sliderInterval);
-};
-
-tabsParent.onmouseleave = () => {
-    sliderInterval = setInterval(autoSlide, intervalTime);
-};
+converter(somInput, usdInput, eurInput, 'som')
+converter(usdInput, somInput, eurInput, 'usd')
+converter(eurInput, somInput, usdInput, 'eur')
