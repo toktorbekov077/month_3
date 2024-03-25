@@ -15,13 +15,7 @@ const closeModal =()=>{
     modal.style.display='none'
     document.body.style.overflow=''
 }
-const showModalOnScrollEnd = () => {
-    if (!isModalShown && window.innerHeight + window.scrollY >= document.body.scrollHeight) {
-        openModal();
-        isModalShown = true;
-        window.removeEventListener('scroll', showModalOnScrollEnd);
-    }
-};
+
 modalTrigger. onclick=()=>{
     openModal()
 }
@@ -33,6 +27,14 @@ modalCloseButton.onclick=()=>{
 modal.onclick = (event)=>{
     if(event.target===modal){
         closeModal()
+    }
+}
+
+const showModalOnScrollEnd = () => {
+    if (!isModalShown && window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+        openModal();
+        isModalShown = true;
+        window.removeEventListener('scroll', showModalOnScrollEnd);
     }
 }
 window.addEventListener('scroll', showModalOnScrollEnd);
